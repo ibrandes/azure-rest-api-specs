@@ -34,8 +34,8 @@ options:
       description: "Azure.Storage.File Service"
     flavor: azure
   "@azure-tools/typespec-java":
-    emitter-output-dir: "{output-dir}/{service-dir}/azure-storage-file"
-    namespace: com.azure.storage.file
+    emitter-output-dir: "{output-dir}/{service-dir}/azure-storage-file-share"
+    namespace: com.azure.storage.file.share
     flavor: azure
   # "@azure-tools/typespec-rust":
   #   package-dir: "azure_storage_file"
