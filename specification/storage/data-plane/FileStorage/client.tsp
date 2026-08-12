@@ -430,7 +430,7 @@ model SignedIdentifiersGo is Array<SignedIdentifier>;
 #suppress "@azure-tools/typespec-azure-core/no-legacy-usage" "This is for legacy compatibility"
 @@Legacy.disablePageable(
   Storage.File.Service.listSharesSegment,
-  "python,javascript,csharp"
+  "python,javascript,csharp,java"
 );
 #suppress "@azure-tools/typespec-azure-core/no-legacy-usage" "This is for legacy compatibility"
 @@Legacy.disablePageable(
@@ -440,12 +440,12 @@ model SignedIdentifiersGo is Array<SignedIdentifier>;
 #suppress "@azure-tools/typespec-azure-core/no-legacy-usage" "This is for legacy compatibility"
 @@Legacy.disablePageable(
   Storage.File.Directory.listHandles,
-  "python,javascript,csharp,go"
+  "python,javascript,csharp,go,java"
 );
 #suppress "@azure-tools/typespec-azure-core/no-legacy-usage" "This is for legacy compatibility"
 @@Legacy.disablePageable(
   Storage.File.File.listHandles,
-  "python,javascript,csharp,go"
+  "python,javascript,csharp,go,java"
 );
 
 #suppress "@azure-tools/typespec-azure-core/no-legacy-usage" "This is for legacy compatibility"
@@ -553,106 +553,6 @@ model DirectoryClientParameters {
 // that the hand-written Share* client builders bind to (tsp otherwise names it FileClientImpl).
 @@clientName(Storage.File, "AzureFileStorage", "java");
 
-// java: generate the service-version enum from the full historical api-version set. The spec only declares
-// 2026-06-06, so @clientApiVersions supplies the complete list. typespec-java emits it as FileServiceVersion,
-// which ShareStorageCustomization then renames to ShareServiceVersion (its public shape is identical to the
-// shipped ShareServiceVersion, so the rename is not a breaking change).
-enum ClientApiVersions {
-  /** API Version 2019-02-02 */
-  v2019_02_02: "2019-02-02",
-
-  /** API Version 2019-07-07 */
-  v2019_07_07: "2019-07-07",
-
-  /** API Version 2019-12-12 */
-  v2019_12_12: "2019-12-12",
-
-  /** API Version 2020-02-10 */
-  v2020_02_10: "2020-02-10",
-
-  /** API Version 2020-04-08 */
-  v2020_04_08: "2020-04-08",
-
-  /** API Version 2020-06-12 */
-  v2020_06_12: "2020-06-12",
-
-  /** API Version 2020-08-04 */
-  v2020_08_04: "2020-08-04",
-
-  /** API Version 2020-10-02 */
-  v2020_10_02: "2020-10-02",
-
-  /** API Version 2020-12-06 */
-  v2020_12_06: "2020-12-06",
-
-  /** API Version 2021-02-12 */
-  v2021_02_12: "2021-02-12",
-
-  /** API Version 2021-04-10 */
-  v2021_04_10: "2021-04-10",
-
-  /** API Version 2021-06-08 */
-  v2021_06_08: "2021-06-08",
-
-  /** API Version 2021-08-06 */
-  v2021_08_06: "2021-08-06",
-
-  /** API Version 2021-10-04 */
-  v2021_10_04: "2021-10-04",
-
-  /** API Version 2021-12-02 */
-  v2021_12_02: "2021-12-02",
-
-  /** API Version 2022-11-02 */
-  v2022_11_02: "2022-11-02",
-
-  /** API Version 2023-01-03 */
-  v2023_01_03: "2023-01-03",
-
-  /** API Version 2023-05-03 */
-  v2023_05_03: "2023-05-03",
-
-  /** API Version 2023-08-03 */
-  v2023_08_03: "2023-08-03",
-
-  /** API Version 2023-11-03 */
-  v2023_11_03: "2023-11-03",
-
-  /** API Version 2024-02-04 */
-  v2024_02_04: "2024-02-04",
-
-  /** API Version 2024-05-04 */
-  v2024_05_04: "2024-05-04",
-
-  /** API Version 2024-08-04 */
-  v2024_08_04: "2024-08-04",
-
-  /** API Version 2024-11-04 */
-  v2024_11_04: "2024-11-04",
-
-  /** API Version 2025-01-05 */
-  v2025_01_05: "2025-01-05",
-
-  /** API Version 2025-05-05 */
-  v2025_05_05: "2025-05-05",
-
-  /** API Version 2025-07-05 */
-  v2025_07_05: "2025-07-05",
-
-  /** API Version 2025-11-05 */
-  v2025_11_05: "2025-11-05",
-
-  /** API Version 2026-02-06 */
-  v2026_02_06: "2026-02-06",
-
-  /** API Version 2026-04-06 */
-  v2026_04_06: "2026-04-06",
-
-  /** API Version 2026-06-06 */
-  v2026_06_06: "2026-06-06",
-}
-@@clientApiVersions(Storage.File, ClientApiVersions, "java");
-
 // java: carry the storage-wide client parameters on the service client so the generated
 // AzureFileStorageImpl constructor matches what the hand-written builders pass (mirrors the csharp
 // @clientInitialization blocks above).
@@ -708,3 +608,12 @@ model AzureFileStorageClientParameters {
 // ShareStats.shareUsageBytes must be int64 (long); the hand-written ModelHelper feeds it into
 // new ShareStatistics(long shareUsageInBytes) -- an int would silently bind to the (int GB) ctor.
 @@alternateType(ShareStats.shareUsageBytes, int64, "java");
+
+// java: emit the public ShareErrorCode / CopyStatusType enums. In DPG they are otherwise orphaned
+// (the error model and copy-status response header aren't referenced by a retained typed operation),
+// so tag them public+output to force emission into the custom-types (public models) package.
+@@access(StorageErrorCode, Access.public, "java");
+@@usage(StorageErrorCode, Usage.output, "java");
+@@clientName(CopyStatus, "CopyStatusType", "java");
+@@access(CopyStatus, Access.public, "java");
+@@usage(CopyStatus, Usage.output, "java");
