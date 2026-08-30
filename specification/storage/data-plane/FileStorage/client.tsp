@@ -608,12 +608,13 @@ model AzureFileStorageClientParameters {
 // // new ShareStatistics(long shareUsageInBytes) -- an int would silently bind to the (int GB) ctor.
 // @@alternateType(ShareStats.shareUsageBytes, int64, "java");
 
+// java: the generated copy-status response header must reference the public CopyStatusType custom-type.
+@@clientName(CopyStatus, "CopyStatusType", "java");
 // // java: emit the public ShareErrorCode / CopyStatusType enums. In DPG they are otherwise orphaned
 // // (the error model and copy-status response header aren't referenced by a retained typed operation),
 // // so tag them public+output to force emission into the custom-types (public models) package.
 // @@access(StorageErrorCode, Access.public, "java");
 // @@usage(StorageErrorCode, Usage.output, "java");
-// @@clientName(CopyStatus, "CopyStatusType", "java");
 // @@access(CopyStatus, Access.public, "java");
 // @@usage(CopyStatus, Usage.output, "java");
 
