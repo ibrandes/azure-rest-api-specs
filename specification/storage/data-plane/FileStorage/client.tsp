@@ -550,7 +550,6 @@ model DirectoryClientParameters {
 
 // java customizations
 // name the service-client impl "AzureFileStorageImpl" to match the historical swagger name
-// that the hand-written Share* client builders bind to (tsp otherwise names it FileClientImpl).
 @@clientName(Storage.File, "AzureFileStorage", "java");
 
 // java: carry the storage-wide client parameters on the service client so the generated
@@ -590,6 +589,70 @@ model AzureFileStorageClientParameters {
 );
 @@clientName(StorageErrorCode, "ShareErrorCode", "java");
 
+// java: the public API (ShareServiceClient / ShareClient / ShareDirectoryClient / ShareFileClient and
+// their async variants) is hand-written over the generated implementation layer. Mark every service
+// operation internal for java so the emitter produces only the implementation clients
+// (AzureFileStorageImpl + Directories/Files/Services/SharesImpl) and no generated convenience clients.
+@@access(Storage.File.Service.setProperties, Access.internal, "java");
+@@access(Storage.File.Service.getProperties, Access.internal, "java");
+@@access(Storage.File.Service.listSharesSegment, Access.internal, "java");
+@@access(Storage.File.Service.getUserDelegationKey, Access.internal, "java");
+
+@@access(Storage.File.Share.create, Access.internal, "java");
+@@access(Storage.File.Share.getProperties, Access.internal, "java");
+@@access(Storage.File.Share.delete, Access.internal, "java");
+@@access(Storage.File.Share.acquireLease, Access.internal, "java");
+@@access(Storage.File.Share.releaseLease, Access.internal, "java");
+@@access(Storage.File.Share.changeLease, Access.internal, "java");
+@@access(Storage.File.Share.renewLease, Access.internal, "java");
+@@access(Storage.File.Share.breakLease, Access.internal, "java");
+@@access(Storage.File.Share.createSnapshot, Access.internal, "java");
+@@access(Storage.File.Share.createPermission, Access.internal, "java");
+@@access(Storage.File.Share.getPermission, Access.internal, "java");
+@@access(Storage.File.Share.setProperties, Access.internal, "java");
+@@access(Storage.File.Share.setMetadata, Access.internal, "java");
+@@access(Storage.File.Share.getAccessPolicy, Access.internal, "java");
+@@access(Storage.File.Share.setAccessPolicy, Access.internal, "java");
+@@access(Storage.File.Share.getStatistics, Access.internal, "java");
+@@access(Storage.File.Share.restore, Access.internal, "java");
+
+@@access(Storage.File.Directory.create, Access.internal, "java");
+@@access(Storage.File.Directory.getProperties, Access.internal, "java");
+@@access(Storage.File.Directory.delete, Access.internal, "java");
+@@access(Storage.File.Directory.setProperties, Access.internal, "java");
+@@access(Storage.File.Directory.setMetadata, Access.internal, "java");
+@@access(
+  Storage.File.Directory.listFilesAndDirectoriesSegment,
+  Access.internal,
+  "java"
+);
+@@access(Storage.File.Directory.listHandles, Access.internal, "java");
+@@access(Storage.File.Directory.forceCloseHandles, Access.internal, "java");
+@@access(Storage.File.Directory.rename, Access.internal, "java");
+
+@@access(Storage.File.File.create, Access.internal, "java");
+@@access(Storage.File.File.download, Access.internal, "java");
+@@access(Storage.File.File.getProperties, Access.internal, "java");
+@@access(Storage.File.File.delete, Access.internal, "java");
+@@access(Storage.File.File.setHttpHeaders, Access.internal, "java");
+@@access(Storage.File.File.setMetadata, Access.internal, "java");
+@@access(Storage.File.File.acquireLease, Access.internal, "java");
+@@access(Storage.File.File.releaseLease, Access.internal, "java");
+@@access(Storage.File.File.changeLease, Access.internal, "java");
+@@access(Storage.File.File.breakLease, Access.internal, "java");
+@@access(Storage.File.File.uploadRange, Access.internal, "java");
+@@access(Storage.File.File.uploadRangeFromUrl, Access.internal, "java");
+@@access(Storage.File.File.getRangeList, Access.internal, "java");
+@@access(Storage.File.File.listAllRanges, Access.internal, "java");
+@@access(Storage.File.File.startCopy, Access.internal, "java");
+@@access(Storage.File.File.abortCopy, Access.internal, "java");
+@@access(Storage.File.File.listHandles, Access.internal, "java");
+@@access(Storage.File.File.forceCloseHandles, Access.internal, "java");
+@@access(Storage.File.File.rename, Access.internal, "java");
+@@access(Storage.File.File.createSymbolicLink, Access.internal, "java");
+@@access(Storage.File.File.getSymbolicLink, Access.internal, "java");
+@@access(Storage.File.File.createHardLink, Access.internal, "java");
+
 // java: reconcile generated model property names with the historical swagger x-ms-client-name
 // values so the public API surface stays backward compatible.
 @@clientName(AccessPolicy.start, "startsOn", "java");
@@ -604,16 +667,138 @@ model AzureFileStorageClientParameters {
 );
 @@clientName(KeyInfo.delegatedUserTid, "delegatedUserTenantId", "java");
 
-// java: match the historical swagger numeric widths that the hand-written wrapper models depend on.
-// ShareStats.shareUsageBytes must be int64 (long); the hand-written ModelHelper feeds it into
-// new ShareStatistics(long shareUsageInBytes) -- an int would silently bind to the (int GB) ctor.
-@@alternateType(ShareStats.shareUsageBytes, int64, "java");
+// // java: match the historical swagger numeric widths that the hand-written wrapper models depend on.
+// // ShareStats.shareUsageBytes must be int64 (long); the hand-written ModelHelper feeds it into
+// // new ShareStatistics(long shareUsageInBytes) -- an int would silently bind to the (int GB) ctor.
+// @@alternateType(ShareStats.shareUsageBytes, int64, "java");
 
-// java: emit the public ShareErrorCode / CopyStatusType enums. In DPG they are otherwise orphaned
-// (the error model and copy-status response header aren't referenced by a retained typed operation),
-// so tag them public+output to force emission into the custom-types (public models) package.
-@@access(StorageErrorCode, Access.public, "java");
-@@usage(StorageErrorCode, Usage.output, "java");
-@@clientName(CopyStatus, "CopyStatusType", "java");
-@@access(CopyStatus, Access.public, "java");
-@@usage(CopyStatus, Usage.output, "java");
+// // java: emit the public ShareErrorCode / CopyStatusType enums. In DPG they are otherwise orphaned
+// // (the error model and copy-status response header aren't referenced by a retained typed operation),
+// // so tag them public+output to force emission into the custom-types (public models) package.
+// @@access(StorageErrorCode, Access.public, "java");
+// @@usage(StorageErrorCode, Usage.output, "java");
+// @@clientName(CopyStatus, "CopyStatusType", "java");
+// @@access(CopyStatus, Access.public, "java");
+// @@usage(CopyStatus, Usage.output, "java");
+
+#suppress "@azure-tools/typespec-client-generator-core/client-option" "Emitter option for response header model synthesis"
+namespace JavaResponseHeaderModels {
+  @@clientOption(
+    Storage.File.File.setMetadata,
+    "responseHeadersAsModel",
+    true,
+    "java"
+  );
+
+  @@clientOption(
+    Storage.File.Directory.create,
+    "responseHeadersAsModel",
+    true,
+    "java"
+  );
+  @@clientOption(
+    Storage.File.Directory.forceCloseHandles,
+    "responseHeadersAsModel",
+    true,
+    "java"
+  );
+  @@clientOption(
+    Storage.File.Directory.getProperties,
+    "responseHeadersAsModel",
+    true,
+    "java"
+  );
+  @@clientOption(
+    Storage.File.Directory.setMetadata,
+    "responseHeadersAsModel",
+    true,
+    "java"
+  );
+  @@clientOption(
+    Storage.File.Directory.setProperties,
+    "responseHeadersAsModel",
+    true,
+    "java"
+  );
+
+  @@clientOption(
+    Storage.File.File.createHardLink,
+    "responseHeadersAsModel",
+    true,
+    "java"
+  );
+  @@clientOption(
+    Storage.File.File.create,
+    "responseHeadersAsModel",
+    true,
+    "java"
+  );
+  @@clientOption(
+    Storage.File.File.createSymbolicLink,
+    "responseHeadersAsModel",
+    true,
+    "java"
+  );
+  @@clientOption(
+    Storage.File.File.forceCloseHandles,
+    "responseHeadersAsModel",
+    true,
+    "java"
+  );
+  @@clientOption(
+    Storage.File.File.getProperties,
+    "responseHeadersAsModel",
+    true,
+    "java"
+  );
+  @@clientOption(
+    Storage.File.File.getSymbolicLink,
+    "responseHeadersAsModel",
+    true,
+    "java"
+  );
+  @@clientOption(
+    Storage.File.File.setHttpHeaders,
+    "responseHeadersAsModel",
+    true,
+    "java"
+  );
+  @@clientOption(
+    Storage.File.File.startCopy,
+    "responseHeadersAsModel",
+    true,
+    "java"
+  );
+  @@clientOption(
+    Storage.File.File.uploadRangeFromUrl,
+    "responseHeadersAsModel",
+    true,
+    "java"
+  );
+  @@clientOption(
+    Storage.File.File.uploadRange,
+    "responseHeadersAsModel",
+    true,
+    "java"
+  );
+
+
+  @@clientOption(
+    Storage.File.Share.createPermission,
+    "responseHeadersAsModel",
+    true,
+    "java"
+  );
+  @@clientOption(
+    Storage.File.Share.createSnapshot,
+    "responseHeadersAsModel",
+    true,
+    "java"
+  );
+  @@clientOption(
+    Storage.File.Share.getProperties,
+    "responseHeadersAsModel",
+    true,
+    "java"
+  );
+}
