@@ -39,7 +39,7 @@ options:
     model-namespace: true
     flavor: azure
     customization-class: swagger/src/main/java/ShareStorageCustomization.java
-    models-subpackage: "models"
+    models-subpackage: "implementation.models"
     custom-types-subpackage: "models"
     generate-tests: false
     custom-types: "ShareFileHttpHeaders,ShareServiceProperties,ShareCorsRule,Range,FileRange,ClearRange,ShareFileRangeList,CopyStatusType,ShareSignedIdentifier,SourceModifiedAccessConditions,ShareErrorCode,StorageServiceProperties,ShareMetrics,ShareAccessPolicy,ShareFileDownloadHeaders,LeaseDurationType,LeaseStateType,LeaseStatusType,PermissionCopyModeType,ShareAccessTier,ShareRootSquash,ShareRetentionPolicy,ShareProtocolSettings,ShareSmbSettings,SmbMultichannel,FileLastWrittenMode,ShareTokenIntent,ShareFileHandleAccessRights,FilePermissionFormat,NfsFileType,ModeCopyMode,OwnerCopyMode,UserDelegationKey,ShareNfsSettingsEncryptionInTransit,ShareSmbSettingsEncryptionInTransit,ShareNfsSettings,FilePropertySemantics"
