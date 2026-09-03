@@ -515,7 +515,7 @@ model DirectoryClientParameters {
 
 @@alternateType(AccessPolicy.start, utcDateTime, "csharp,java");
 @@alternateType(AccessPolicy.expiry, utcDateTime, "csharp,java");
-@@alternateType(MetadataHeaders.metadata, Record<string>, "csharp");
+@@alternateType(MetadataHeaders.metadata, Record<string>, "csharp,java");
 @@alternateType(FileProperty.eTag, string, "csharp");
 @@alternateType(ShareStats.shareUsageBytes, int64, "csharp");
 
@@ -718,7 +718,6 @@ namespace JavaResponseHeaderModels {
     true,
     "java"
   );
-
 
   @@clientOption(
     Storage.File.Share.createPermission,

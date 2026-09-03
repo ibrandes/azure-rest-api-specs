@@ -38,6 +38,7 @@ options:
     namespace: com.azure.storage.file.share
     model-namespace: true
     flavor: azure
+    max-overload: model
     customization-class: swagger/src/main/java/ShareStorageCustomization.java
     models-subpackage: "implementation.models"
     custom-types-subpackage: "models"
