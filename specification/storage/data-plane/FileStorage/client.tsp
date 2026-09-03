@@ -102,9 +102,9 @@ model SignedIdentifiersGo is Array<SignedIdentifier>;
   "go"
 );
 @@alternateType(HandleItem.path, string, "go");
-@@alternateType(LeaseResponseHeaders.leaseDuration, LeaseDurationType, "go");
-@@alternateType(LeaseResponseHeaders.leaseState, LeaseStateType, "go");
-@@alternateType(LeaseResponseHeaders.leaseStatus, LeaseStatusType, "go");
+@@alternateType(LeaseResponseHeaders.leaseDuration, LeaseDurationType, "go,java");
+@@alternateType(LeaseResponseHeaders.leaseState, LeaseStateType, "go,java");
+@@alternateType(LeaseResponseHeaders.leaseStatus, LeaseStatusType, "go,java");
 @@alternateType(LinkCountResponseHeader.linkCount, int64, "go");
 @@alternateType(ListFilesAndDirectoriesSegmentResponse.prefix, string, "go");
 @@alternateType(NfsTimestampResponseHeaders.fileChangeTime, utcDateTime, "go");
