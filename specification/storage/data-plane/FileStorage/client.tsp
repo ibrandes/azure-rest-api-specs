@@ -435,7 +435,7 @@ model SignedIdentifiersGo is Array<SignedIdentifier>;
 #suppress "@azure-tools/typespec-azure-core/no-legacy-usage" "This is for legacy compatibility"
 @@Legacy.disablePageable(
   Storage.File.Directory.listFilesAndDirectoriesSegment,
-  "python,javascript,csharp"
+  "python,javascript,csharp,java"
 );
 #suppress "@azure-tools/typespec-azure-core/no-legacy-usage" "This is for legacy compatibility"
 @@Legacy.disablePageable(
@@ -451,7 +451,7 @@ model SignedIdentifiersGo is Array<SignedIdentifier>;
 #suppress "@azure-tools/typespec-azure-core/no-legacy-usage" "This is for legacy compatibility"
 @@Legacy.disablePageable(
   Storage.File.File.listAllRanges,
-  "python,javascript,csharp,go"
+  "python,javascript,csharp,go,java"
 );
 
 @@alternateType(Storage.File.FileProperty.creationTime, string, "python");
@@ -603,10 +603,10 @@ model AzureFileStorageClientParameters {
 );
 @@clientName(KeyInfo.delegatedUserTid, "delegatedUserTenantId", "java");
 
-// // java: match the historical swagger numeric widths that the hand-written wrapper models depend on.
-// // ShareStats.shareUsageBytes must be int64 (long); the hand-written ModelHelper feeds it into
-// // new ShareStatistics(long shareUsageInBytes) -- an int would silently bind to the (int GB) ctor.
-// @@alternateType(ShareStats.shareUsageBytes, int64, "java");
+// java: match the historical swagger numeric widths that the hand-written wrapper models depend on.
+// ShareStats.shareUsageBytes must be int64 (long); the hand-written ModelHelper feeds it into
+// new ShareStatistics(long shareUsageInBytes) -- an int would silently bind to the (int GB) ctor.
+@@alternateType(ShareStats.shareUsageBytes, int64, "java");
 
 // java: the generated copy-status response header must reference the public CopyStatusType custom-type.
 @@clientName(CopyStatus, "CopyStatusType", "java");
