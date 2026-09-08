@@ -90,19 +90,27 @@ model SignedIdentifiersGo is Array<SignedIdentifier>;
 @@alternateType(ContentCrc64ResponseHeader.contentCrc64, bytes, "go");
 @@alternateType(DirectoryItem.name, string, "go");
 @@alternateType(FileItem.name, string, "go");
-@@alternateType(FileChangeTimeResponseHeader.fileChangeTime, utcDateTime, "go");
+@@alternateType(
+  FileChangeTimeResponseHeader.fileChangeTime,
+  utcDateTime,
+  "go,java"
+);
 @@alternateType(
   FileCreationTimeResponseHeader.fileCreationTime,
   utcDateTime,
-  "go"
+  "go,java"
 );
 @@alternateType(
   FileLastWriteTimeResponseHeader.fileLastWriteTime,
   utcDateTime,
-  "go"
+  "go,java"
 );
 @@alternateType(HandleItem.path, string, "go");
-@@alternateType(LeaseResponseHeaders.leaseDuration, LeaseDurationType, "go,java");
+@@alternateType(
+  LeaseResponseHeaders.leaseDuration,
+  LeaseDurationType,
+  "go,java"
+);
 @@alternateType(LeaseResponseHeaders.leaseState, LeaseStateType, "go,java");
 @@alternateType(LeaseResponseHeaders.leaseStatus, LeaseStatusType, "go,java");
 @@alternateType(LinkCountResponseHeader.linkCount, int64, "go");
@@ -545,7 +553,7 @@ model DirectoryClientParameters {
   Storage.File.MetadataHeaders.metadata,
   "collectionHeaderPrefix",
   "x-ms-meta-",
-  "csharp"
+  "csharp,java"
 );
 
 // java customizations
@@ -610,11 +618,11 @@ model AzureFileStorageClientParameters {
 
 // java: the generated copy-status response header must reference the public CopyStatusType custom-type.
 @@clientName(CopyStatus, "CopyStatusType", "java");
-// // java: emit the public ShareErrorCode / CopyStatusType enums. In DPG they are otherwise orphaned
-// // (the error model and copy-status response header aren't referenced by a retained typed operation),
-// // so tag them public+output to force emission into the custom-types (public models) package.
-// @@access(StorageErrorCode, Access.public, "java");
-// @@usage(StorageErrorCode, Usage.output, "java");
+// java: emit the public ShareErrorCode enum. In DPG it is otherwise orphaned (the error model isn't
+// referenced by a retained typed operation), so tag it public+output to force emission into the
+// custom-types (public models) package.
+@@access(StorageErrorCode, Access.public, "java");
+@@usage(StorageErrorCode, Usage.output, "java");
 // @@access(CopyStatus, Access.public, "java");
 // @@usage(CopyStatus, Usage.output, "java");
 
